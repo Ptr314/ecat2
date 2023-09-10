@@ -1,0 +1,69 @@
+ODI
+00000000-000000FF: BOOT-sector (256)
+00000100-00004FFF: SYSTEM (20k-256 =OFF)
+00005000-00005FFF: CATALOG (4k=CKS)
+00006000-000C7FFF: DATA
+
+BOOT-sector:
+00-1F: DPB
+20-FF: code
+
+  TBootDPB = packed record    // Disk Parameters Header (BOOT .. BOOT+1EH, BOOT+1FH=CRC)
+//-------------------------------------------------------------------- Orion specific
+               jump: array [0..7] of byte;
+               PAGE1: byte;   //=01
+               PAGE2: byte;   //=01
+               LEN1:  byte;   // размер физ. сектора (1=256, 2=512, 3=1024) 		=03 (1024)
+               LEN2:  byte;   // сторон (0=one_side, 1=double_sided)			=01 (ds)
+               SEC:   word;   // физ. секторов в дорожке				=0005
+               TRK:   word;   // физ. дорожек (1 сторона)				=0050 (80)
+//-------------------------------------------------------------------- CP/M standard
+               SPT:   word;   // лог. секторов (128) в дорожке				=0028 (40)
+               BSH:   byte;   // Block Shift - Block Size is given by 128 * 2^(BSH)	=04 (2048)
+               BLM:   byte;   // Block Mask - Block Size is given by 128 * (BLM +1)	=0F (2048)
+               EXM:   byte;   // Extent Mask (0=16k, 1=32k, 3=64k, 7=128k)		=00 (16k)
+               DSM:   word;   // user space size in kb = SEC * (TRK-OFF) - (CKS/8)	=0184
+               DRM:   word;   // max quantity of file records (FCBs) in catalog		=007F
+               AL:    word;   // 16-bit Directory Allocation Pattern			=00C0
+               CKS:   word;   // Directory Check Sum = catalog size (in logical blocks)	=0020 (4k)
+               OFF:   word;   // system tracks						=0004 (20k)
+               CRC:   byte;   // simple additional CRC beginning with 066h		=C5
+             end;
+
+AL
+       al0              al1
+b7b6b5b4b3b2b1b0 b7b6b5b4b3b2b1b0
+ 1 1 0 0 0 0 0 0  0 0 0 0 0 0 0 0
+т.е. каталог занимает два лог. блока (по 2к)
+
+запись каталога
+
+UU F1 F2 F3 F4 F5 F6 F7 F8 T1 T2 T3 EX S1 S2 RC   .FILENAMETYP....
+AL AL AL AL AL AL AL AL AL AL AL AL AL AL AL AL   ................
+
+	UU - User #,    0-15 - обычный файл						=00
+			E5 - удаленный файл
+	Fn - имя файла									=ASM
+	Tn - расширение									=COM
+			T1 and $80 > 0 => файл read-only				=+
+			T2 and $80 > 0 => файл system (hidden)				=-
+	EX - номер экстента, младший байт. 0-31						=00
+	S1 - 0 (reserved)								=00
+	S2 - номер экстента, старший байт. 						=00
+	RC - кол-во логических блоков (128) в этом экстенте, мл. байт			=40 (10k)
+		Всего блоков в экстенте: (EX & EXM) * 128 + RC
+		если RC=80H, значит может присутствовать еще один экстент
+	AL - Номера блоков на диске. Могут быть 8 или 16-битовые
+							= 0002 0003 0004 0005 0000 0000 0000 0000
+
+Длинный файл
+ENTRY 1
+UU F1 F2 F3 F4 F5 F6 F7 F8 T1 T2 T3 EX S1 S2 RC
+00 42 50 20 20 20 20 20 20 D4 58 54 00 00 00 80 .BP      TXT....
+0B 00 0C 00 0D 00 0E 00 0F 00 10 00 11 00 12 00 ................
+ENTRY 2
+UU F1 F2 F3 F4 F5 F6 F7 F8 T1 T2 T3 EX S1 S2 RC
+00 42 50 20 20 20 20 20 20 D4 58 54 01 00 00 3C .BP      TXT....
+13 00 14 00 15 00 15 00 00 00 00 00 00 00 00 00 ................
+
+остаток заполняется байтами E5

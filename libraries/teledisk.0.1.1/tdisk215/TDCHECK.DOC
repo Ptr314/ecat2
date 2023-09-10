@@ -1,0 +1,80 @@
+
+
+
+                        TDCheck - Check A TeleDisk Image File
+
+                                Copyright 1990, Sydex
+                                    P.O. Box 5700
+                                   Eugene, OR  97405
+                                Voice:  (503)  683-6033
+                                FAX:    (503)  683-1622
+                                Data:   (503)  683-1385
+
+
+          TDCheck is a small utility to verify the integrity of a  TeleDisk
+          .TDO file.   It reports the type and density of the drive used to
+          make the image, the compression method,  and the area copied from
+          the diskette.
+
+          TDCheck is run as a DOS command-line utility;  the command syntax
+          is:
+
+                         TDCheck file...
+
+          where file is the name of one or more TeleDisk image files.   The
+          .TD0 extension need not be specified and the file name(s) can con-
+          tain the wildcard characters '*' and '?'.   Here is an example of
+          a TDCheck session:
+
+                         TDCheck *
+
+          TDCheck TeleDisk File Checker, Version 2.10I
+          Sydex Copyright 1990.  All Rights Reserved.
+
+
+          -- Checking WAZOO.TD0...
+
+          New Advanced data compression was used.
+          All sectors were copied.
+          Both sides were checked.
+          Source was 5¬" 48 tpi low-density MFM.
+
+          Reading Track 39, Side 1, 10 Sectors
+
+          *** WAZOO.TD0 Checks OK ***
+
+          -- Checking MOUSER.TD0...
+
+          New Advanced data compression was used.
+          DOS Allocated sectors were copied.
+          Source was 5¬" 48 tpi low-density MFM.
+
+          Reading Track 39, Side 1, 9 Sectors
+
+          *** MOUSER.TD0 Checks OK ***
+
+          -- Checking OLDLZH.TD0...
+
+
+
+          New Advanced data compression was used.
+          All sectors were copied.
+          Both sides were checked.
+          Source was 5¬" 48 tpi low-density MFM.
+
+          Reading Track 39, Side 1, 9 Sectors
+
+          *** OLDLZH.TD0 Checks OK ***
+
+          -- Checking DISCUS.TD0...
+
+          New Advanced data compression was used.
+          All sectors were copied.
+          Both sides were checked.
+          Source was 5¬" 48 tpi low-density MFM.
+
+          Reading Track 1, Side 0, 9 Sectors
+
+          4 file(s) processed.
+
+

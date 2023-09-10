@@ -1,0 +1,24 @@
+                   WHAT'S NEW IN TELEDISK 2.10
+
+We've added a comment feature to image files and cleared a bug with "DOS
+only" type image files.
+
+                    WHAT'S NEW IN TELEDISK 2.04
+
+Another obscure one -- when restoriug a mixed single/double density diskette
+from a file, the density wouldn't get switched appropriately.  The image files
+produced by older versions of TeleDisk are valid, however.
+
+                    WHAT'S NEW IN TELEDISK 2.03
+
+An obscure bug occurs while performing a disk-to-disk copy from a unit on a
+secondary controller to one on a primary.  This release repairs this and
+extends somewhat the copying capabilities of TeleDisk.
+
+                    WHAT'S NEW IN TELEDISK 2.01
+
+We've chased a number of bugs in this version and successfully squashed them.
+You now have the option of copying both sides, either side, or just the DOS
+allocated sectors.  This has resulted in  the DISK TO FILE menu changing  a bit.
+
+
